@@ -131,7 +131,7 @@ func (o *Builder) executeBatchLOCKED(batch *index.Batch) (err error) {
 		}
 	}
 
-	seg, _, err := zap.AnalysisResultsToSegmentBase(analysisResults, DefaultChunkFactor)
+	seg, _, err := zap.AnalysisResultsToSegmentBase(analysisResults, DefaultChunkMode)
 	if err != nil {
 		return fmt.Errorf("error building segment base: %v", err)
 	}
@@ -182,7 +182,7 @@ func (o *Builder) doMerge() error {
 		// do the merge
 		mergedSegPath := o.buildPath + string(os.PathSeparator) + zapFileName(o.segCount)
 		drops := make([]*roaring.Bitmap, mergeCount)
-		_, _, err := zap.Merge(mergeSegs, drops, mergedSegPath, DefaultChunkFactor, nil, nil)
+		_, _, err := zap.Merge(mergeSegs, drops, mergedSegPath, DefaultChunkMode, nil, nil)
 		if err != nil {
 			closeOpenedSegs()
 			return fmt.Errorf("error merging segments (%v): %v", mergePaths, err)
