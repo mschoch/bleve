@@ -171,7 +171,7 @@ func (d *Dictionary) RangeIterator(start, end string) segment.DictionaryIterator
 
 // AutomatonIterator returns an iterator which only visits terms
 // having the the vellum automaton and start/end key range
-func (d *Dictionary) AutomatonIterator(a vellum.Automaton,
+func (d *Dictionary) AutomatonIterator(a segment.Automaton,
 	startKeyInclusive, endKeyExclusive []byte) segment.DictionaryIterator {
 	rv := &DictionaryIterator{
 		d: d,

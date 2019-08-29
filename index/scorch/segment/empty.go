@@ -17,7 +17,6 @@ package segment
 import (
 	"github.com/RoaringBitmap/roaring"
 	"github.com/blevesearch/bleve/index"
-	"github.com/couchbase/vellum"
 )
 
 type EmptySegment struct{}
@@ -81,7 +80,7 @@ func (e *EmptyDictionary) RangeIterator(start, end string) DictionaryIterator {
 	return &EmptyDictionaryIterator{}
 }
 
-func (e *EmptyDictionary) AutomatonIterator(a vellum.Automaton,
+func (e *EmptyDictionary) AutomatonIterator(a Automaton,
 	startKeyInclusive, endKeyExclusive []byte) DictionaryIterator {
 	return &EmptyDictionaryIterator{}
 }

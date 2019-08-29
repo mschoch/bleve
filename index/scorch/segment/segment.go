@@ -19,7 +19,6 @@ import (
 
 	"github.com/RoaringBitmap/roaring"
 	"github.com/blevesearch/bleve/index"
-	"github.com/couchbase/vellum"
 )
 
 var ErrClosed = fmt.Errorf("index closed")
@@ -50,13 +49,34 @@ type Segment interface {
 	DecRef() error
 }
 
+// Automaton represents the general contract of a byte-based finite automaton
+type Automaton interface {
+
+	// Start returns the start state
+	Start() int
+
+	// IsMatch returns true if and only if the state is a match
+	IsMatch(int) bool
+
+	// CanMatch returns true if and only if it is possible to reach a match
+	// in zero or more steps
+	CanMatch(int) bool
+
+	// WillAlwaysMatch returns true if and only if the current state matches
+	// and will always match no matter what steps are taken
+	WillAlwaysMatch(int) bool
+
+	// Accept returns the next state given the input to the specified state
+	Accept(int, byte) int
+}
+
 type TermDictionary interface {
 	PostingsList(term []byte, except *roaring.Bitmap, prealloc PostingsList) (PostingsList, error)
 
 	Iterator() DictionaryIterator
 	PrefixIterator(prefix string) DictionaryIterator
 	RangeIterator(start, end string) DictionaryIterator
-	AutomatonIterator(a vellum.Automaton,
+	AutomatonIterator(a Automaton,
 		startKeyInclusive, endKeyExclusive []byte) DictionaryIterator
 	OnlyIterator(onlyTerms [][]byte, includeCount bool) DictionaryIterator
 
