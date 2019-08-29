@@ -25,7 +25,7 @@ import (
 	"github.com/blugelabs/bleve/analysis"
 	"github.com/blugelabs/bleve/document"
 	"github.com/blugelabs/bleve/index"
-	"github.com/couchbase/vellum"
+	"github.com/blugelabs/vellum"
 	"github.com/golang/snappy"
 )
 

@@ -26,7 +26,7 @@ import (
 	"github.com/RoaringBitmap/roaring"
 	"github.com/blugelabs/bleve/index/scorch/segment"
 	"github.com/blugelabs/bleve/size"
-	"github.com/couchbase/vellum"
+	"github.com/blugelabs/vellum"
 	mmap "github.com/edsrzf/mmap-go"
 	"github.com/golang/snappy"
 )

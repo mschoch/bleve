@@ -21,7 +21,7 @@ import (
 
 	"github.com/RoaringBitmap/roaring"
 	"github.com/blugelabs/bleve/index/scorch/segment/zap"
-	"github.com/couchbase/vellum"
+	"github.com/blugelabs/vellum"
 	"github.com/spf13/cobra"
 )
 

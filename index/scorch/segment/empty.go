@@ -17,7 +17,7 @@ package segment
 import (
 	"github.com/RoaringBitmap/roaring"
 	"github.com/blugelabs/bleve/index"
-	"github.com/couchbase/vellum"
+	"github.com/blugelabs/vellum"
 )
 
 type EmptySegment struct{}

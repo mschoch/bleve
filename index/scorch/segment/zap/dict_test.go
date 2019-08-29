@@ -22,7 +22,7 @@ import (
 	"github.com/blugelabs/bleve/analysis"
 	"github.com/blugelabs/bleve/document"
 	"github.com/blugelabs/bleve/index"
-	"github.com/couchbase/vellum/levenshtein"
+	"github.com/blugelabs/vellum/levenshtein"
 )
 
 func buildTestSegmentForDict() (*SegmentBase, uint64, error) {

@@ -27,8 +27,8 @@ import (
 	"github.com/blugelabs/bleve/document"
 	"github.com/blugelabs/bleve/index"
 	"github.com/blugelabs/bleve/index/scorch/segment"
-	"github.com/couchbase/vellum"
-	lev "github.com/couchbase/vellum/levenshtein"
+	"github.com/blugelabs/vellum"
+	lev "github.com/blugelabs/vellum/levenshtein"
 )
 
 // re usable, threadsafe levenshtein builders

@@ -16,7 +16,7 @@ package zap
 
 import (
 	"bufio"
-	"github.com/couchbase/vellum"
+	"github.com/blugelabs/vellum"
 	"math"
 	"os"
 )

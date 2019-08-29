@@ -21,7 +21,7 @@ import (
 	"github.com/RoaringBitmap/roaring"
 	"github.com/blugelabs/bleve/index"
 	"github.com/blugelabs/bleve/index/scorch/segment"
-	"github.com/couchbase/vellum"
+	"github.com/blugelabs/vellum"
 )
 
 // Dictionary is the zap representation of the term dictionary
