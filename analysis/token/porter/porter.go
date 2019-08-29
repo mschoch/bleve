@@ -17,8 +17,8 @@ package porter
 import (
 	"bytes"
 
-	"github.com/blevesearch/bleve/analysis"
-	"github.com/blevesearch/bleve/registry"
+	"github.com/blugelabs/bleve/analysis"
+	"github.com/blugelabs/bleve/registry"
 
 	"github.com/blevesearch/go-porterstemmer"
 )

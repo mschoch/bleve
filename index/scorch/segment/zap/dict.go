@@ -19,8 +19,8 @@ import (
 	"fmt"
 
 	"github.com/RoaringBitmap/roaring"
-	"github.com/blevesearch/bleve/index"
-	"github.com/blevesearch/bleve/index/scorch/segment"
+	"github.com/blugelabs/bleve/index"
+	"github.com/blugelabs/bleve/index/scorch/segment"
 	"github.com/couchbase/vellum"
 )
 

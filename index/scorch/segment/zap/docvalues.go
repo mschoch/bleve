@@ -22,9 +22,9 @@ import (
 	"reflect"
 	"sort"
 
-	"github.com/blevesearch/bleve/index"
-	"github.com/blevesearch/bleve/index/scorch/segment"
-	"github.com/blevesearch/bleve/size"
+	"github.com/blugelabs/bleve/index"
+	"github.com/blugelabs/bleve/index/scorch/segment"
+	"github.com/blugelabs/bleve/size"
 	"github.com/golang/snappy"
 )
 
