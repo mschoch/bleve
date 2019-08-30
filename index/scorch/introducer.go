@@ -21,7 +21,6 @@ import (
 	"github.com/RoaringBitmap/roaring"
 	"github.com/blugelabs/bleve/index"
 	"github.com/blugelabs/bleve/index/scorch/segment"
-	"github.com/blugelabs/bleve/index/scorch/segment/zap"
 )
 
 type segmentIntroduction struct {
@@ -409,11 +408,11 @@ func (s *Scorch) introduceMerge(nextMerge *segmentMerge) {
 		atomic.AddUint64(&s.stats.TotIntroducedSegmentsMerge, 1)
 
 		switch nextMerge.new.(type) {
-		case *zap.SegmentBase:
+		case segment.PersistedSegment:
+			fileSegments++
+		default:
 			docsToPersistCount += nextMerge.new.Count() - newSegmentDeleted.GetCardinality()
 			memSegments++
-		case *zap.Segment:
-			fileSegments++
 		}
 	}
 
@@ -520,9 +519,9 @@ func (s *Scorch) revertToSnapshot(revertTo *snapshotReversion) error {
 
 func isMemorySegment(s *SegmentSnapshot) bool {
 	switch s.segment.(type) {
-	case *zap.SegmentBase:
-		return true
-	default:
+	case segment.PersistedSegment:
 		return false
+	default:
+		return true
 	}
 }

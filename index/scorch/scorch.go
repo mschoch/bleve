@@ -28,7 +28,6 @@ import (
 	"github.com/blugelabs/bleve/document"
 	"github.com/blugelabs/bleve/index"
 	"github.com/blugelabs/bleve/index/scorch/segment"
-	"github.com/blugelabs/bleve/index/scorch/segment/zap"
 	"github.com/blugelabs/bleve/index/store"
 	"github.com/blugelabs/bleve/registry"
 	bolt "github.com/etcd-io/bbolt"
@@ -78,6 +77,8 @@ type Scorch struct {
 	pauseLock sync.RWMutex
 
 	pauseCount uint64
+
+	segWrapper *segmentWrapper
 }
 
 type internalStats struct {
@@ -101,6 +102,7 @@ func NewScorch(storeName string,
 		nextSnapshotEpoch:    1,
 		closeCh:              make(chan struct{}),
 		ineligibleForRemoval: map[string]bool{},
+		segWrapper:           defaultSegmentTypeVersion,
 	}
 	rv.root = &IndexSnapshot{parent: rv, refs: 1, creator: "NewScorch"}
 	ro, ok := config["read_only"].(bool)
@@ -349,7 +351,7 @@ func (s *Scorch) Batch(batch *index.Batch) (err error) {
 	var newSegment segment.Segment
 	var bufBytes uint64
 	if len(analysisResults) > 0 {
-		newSegment, bufBytes, err = zap.AnalysisResultsToSegmentBase(analysisResults, DefaultChunkFactor)
+		newSegment, bufBytes, err = s.segWrapper.New(analysisResults, DefaultChunkFactor)
 		if err != nil {
 			return err
 		}

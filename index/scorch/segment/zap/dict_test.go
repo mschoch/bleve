@@ -99,7 +99,8 @@ func buildTestSegmentForDict() (*SegmentBase, uint64, error) {
 		},
 	}
 
-	return AnalysisResultsToSegmentBase(results, 1024)
+	seg, size, err := AnalysisResultsToSegmentBase(results, 1024)
+	return seg.(*SegmentBase), size, err
 }
 
 func TestDictionary(t *testing.T) {

@@ -23,6 +23,7 @@ import (
 	"github.com/RoaringBitmap/roaring"
 	"github.com/blugelabs/bleve/index"
 	"github.com/blugelabs/bleve/index/scorch/segment"
+	seg "github.com/blugelabs/bleve/index/scorch/segment"
 )
 
 func TestOpen(t *testing.T) {
@@ -687,9 +688,9 @@ func TestMergedSegmentDocsWithNonOverlappingFields(t *testing.T) {
 		}
 	}()
 
-	segsToMerge := make([]*Segment, 2)
-	segsToMerge[0] = segment1.(*Segment)
-	segsToMerge[1] = segment2.(*Segment)
+	segsToMerge := make([]seg.Segment, 2)
+	segsToMerge[0] = segment1
+	segsToMerge[1] = segment2
 
 	_, nBytes, err := Merge(segsToMerge, []*roaring.Bitmap{nil, nil}, "/tmp/scorch3.zap", 1024, nil, nil)
 	if err != nil {

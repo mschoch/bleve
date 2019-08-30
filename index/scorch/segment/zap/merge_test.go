@@ -26,6 +26,7 @@ import (
 	"github.com/blugelabs/bleve/analysis"
 	"github.com/blugelabs/bleve/document"
 	"github.com/blugelabs/bleve/index"
+	seg "github.com/blugelabs/bleve/index/scorch/segment"
 )
 
 func TestMerge(t *testing.T) {
@@ -67,9 +68,9 @@ func TestMerge(t *testing.T) {
 		}
 	}()
 
-	segsToMerge := make([]*Segment, 2)
-	segsToMerge[0] = segment.(*Segment)
-	segsToMerge[1] = segment2.(*Segment)
+	segsToMerge := make([]seg.Segment, 2)
+	segsToMerge[0] = segment
+	segsToMerge[1] = segment2
 
 	_, _, err = Merge(segsToMerge, []*roaring.Bitmap{nil, nil}, "/tmp/scorch3.zap", 1024, nil, nil)
 	if err != nil {
@@ -136,10 +137,10 @@ func testMergeWithEmptySegments(t *testing.T, before bool, numEmptySegments int)
 		}
 	}()
 
-	var segsToMerge []*Segment
+	var segsToMerge []seg.Segment
 
 	if before {
-		segsToMerge = append(segsToMerge, segment.(*Segment))
+		segsToMerge = append(segsToMerge, segment)
 	}
 
 	for i := 0; i < numEmptySegments; i++ {
@@ -151,7 +152,7 @@ func testMergeWithEmptySegments(t *testing.T, before bool, numEmptySegments int)
 		if err != nil {
 			t.Fatal(err)
 		}
-		err = PersistSegmentBase(emptySegment, "/tmp/"+fname)
+		err = PersistSegmentBase(emptySegment.(*SegmentBase), "/tmp/"+fname)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -167,11 +168,11 @@ func testMergeWithEmptySegments(t *testing.T, before bool, numEmptySegments int)
 			}
 		}(emptyFileSegment.(*Segment))
 
-		segsToMerge = append(segsToMerge, emptyFileSegment.(*Segment))
+		segsToMerge = append(segsToMerge, emptyFileSegment)
 	}
 
 	if !before {
-		segsToMerge = append(segsToMerge, segment.(*Segment))
+		segsToMerge = append(segsToMerge, segment)
 	}
 
 	_ = os.RemoveAll("/tmp/scorch3.zap")
@@ -217,7 +218,7 @@ func testMergeWithSelf(t *testing.T, segCur *Segment, expectedCount uint64) {
 
 		_ = os.RemoveAll("/tmp/" + fname)
 
-		segsToMerge := make([]*Segment, 1)
+		segsToMerge := make([]seg.Segment, 1)
 		segsToMerge[0] = segCur
 
 		_, _, err := Merge(segsToMerge, []*roaring.Bitmap{nil, nil}, "/tmp/"+fname, 1024, nil, nil)
@@ -497,9 +498,9 @@ func testMergeAndDrop(t *testing.T, docsToDrop []*roaring.Bitmap) {
 		}
 	}()
 
-	segsToMerge := make([]*Segment, 2)
-	segsToMerge[0] = segment.(*Segment)
-	segsToMerge[1] = segment2.(*Segment)
+	segsToMerge := make([]seg.Segment, 2)
+	segsToMerge[0] = segment
+	segsToMerge[1] = segment2
 
 	testMergeAndDropSegments(t, segsToMerge, docsToDrop, 2)
 }
@@ -559,7 +560,7 @@ func TestMergeWithUpdatesOnOneDoc(t *testing.T) {
 }
 
 func testMergeWithUpdates(t *testing.T, segmentDocIds [][]string, docsToDrop []*roaring.Bitmap, expectedNumDocs uint64) {
-	var segsToMerge []*Segment
+	var segsToMerge []seg.Segment
 
 	// convert segmentDocIds to segsToMerge
 	for i, docIds := range segmentDocIds {
@@ -583,13 +584,13 @@ func testMergeWithUpdates(t *testing.T, segmentDocIds [][]string, docsToDrop []*
 			}
 		}(segment.(*Segment))
 
-		segsToMerge = append(segsToMerge, segment.(*Segment))
+		segsToMerge = append(segsToMerge, segment)
 	}
 
 	testMergeAndDropSegments(t, segsToMerge, docsToDrop, expectedNumDocs)
 }
 
-func testMergeAndDropSegments(t *testing.T, segsToMerge []*Segment, docsToDrop []*roaring.Bitmap, expectedNumDocs uint64) {
+func testMergeAndDropSegments(t *testing.T, segsToMerge []seg.Segment, docsToDrop []*roaring.Bitmap, expectedNumDocs uint64) {
 	_ = os.RemoveAll("/tmp/scorch-merged.zap")
 
 	_, _, err := Merge(segsToMerge, docsToDrop, "/tmp/scorch-merged.zap", 1024, nil, nil)
@@ -780,7 +781,8 @@ func buildTestSegmentMultiHelper(docIds []string) (*SegmentBase, uint64, error) 
 		}
 	}
 
-	return AnalysisResultsToSegmentBase(results, 1024)
+	seg, size, err := AnalysisResultsToSegmentBase(results, 1024)
+	return seg.(*SegmentBase), size, err
 }
 
 func TestMergeBytesWritten(t *testing.T) {
@@ -822,9 +824,9 @@ func TestMergeBytesWritten(t *testing.T) {
 		}
 	}()
 
-	segsToMerge := make([]*Segment, 2)
-	segsToMerge[0] = segment.(*Segment)
-	segsToMerge[1] = segment2.(*Segment)
+	segsToMerge := make([]seg.Segment, 2)
+	segsToMerge[0] = segment
+	segsToMerge[1] = segment2
 
 	_, nBytes, err := Merge(segsToMerge, []*roaring.Bitmap{nil, nil}, "/tmp/scorch3.zap", 1024, nil, nil)
 	if err != nil {

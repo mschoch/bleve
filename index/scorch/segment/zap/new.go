@@ -25,6 +25,7 @@ import (
 	"github.com/blugelabs/bleve/analysis"
 	"github.com/blugelabs/bleve/document"
 	"github.com/blugelabs/bleve/index"
+	"github.com/blugelabs/bleve/index/scorch/segment"
 	"github.com/blugelabs/vellum"
 	"github.com/golang/snappy"
 )
@@ -44,7 +45,7 @@ var ValidateDocFields = func(field document.Field) error {
 // AnalysisResultsToSegmentBase produces an in-memory zap-encoded
 // SegmentBase from analysis results
 func AnalysisResultsToSegmentBase(results []*index.AnalysisResult,
-	chunkFactor uint32) (*SegmentBase, uint64, error) {
+	chunkFactor uint32) (segment.Segment, uint64, error) {
 	s := interimPool.Get().(*interim)
 
 	var br bytes.Buffer
